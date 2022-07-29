@@ -1,0 +1,17 @@
+﻿<local:RoundedMetroWindow x:Class="PuppetMaster.Client.UI.Views.ShellView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:PuppetMaster.Client.UI.Views"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+        xmlns:cal="http://caliburnmicro.com"
+        WindowStartupLocation="CenterScreen"
+        Dialog:DialogParticipation.Register="{Binding}"
+        mc:Ignorable="d"
+        MinHeight="700"
+        MinWidth="820"
+        Height="700"
+        Width="820">
+    <ContentControl cal:View.Model="{Binding ActiveItem}" />
+</local:RoundedMetroWindow>

@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="PuppetMaster.Client.UI.Views.RoomView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"
+             xmlns:cal="http://caliburnmicro.com"
+             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:helpers="clr-namespace:PuppetMaster.Client.UI.Helpers"
+             xmlns:behaviors="clr-namespace:PuppetMaster.Client.UI.Behaviors"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0" Margin="4">
+                <Controls:PackIconModern VerticalAlignment="Center" Width="16" Height="16" Margin="4" Kind="Lock" Visibility="{Binding IsPrivate, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <TextBlock VerticalAlignment="Center" FontSize="20" Margin="4" FontWeight="Bold" Name="DisplayName"></TextBlock>
+            </StackPanel>
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="1" Margin="4">
+                <Button Margin="4" Name="ReadyAsync">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource MahApps.Styles.Button.Flat}">
+                            <Setter Property="Background" Value="#66FF0000" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsReady}" Value="True">
+                                    <Setter Property="Background" Value="#6600FF00" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <TextBlock Name="ReadyText"></TextBlock>
+                </Button>
+                <Button Margin="4" Name="LeaveRoomAsync">Leave room</Button>
+            </StackPanel>
+        </Grid>
+        <Border Grid.Row="1" Margin="4" BorderThickness="1" BorderBrush="Black">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl Name="RoomUsers">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ContentControl cal:View.Model="{Binding}" Margin="4" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"></WrapPanel>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+        <Border Grid.Row="2" Margin="4" BorderThickness="1" BorderBrush="Black">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" behaviors:AutoScrollBehavior.AutoScroll="True">
+                <helpers:BindableRichTextBox IsReadOnly="True" Document="{Binding Messages}" />
+            </ScrollViewer>
+        </Border>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBox Name="InputMessage" Margin="4" mah:TextBoxHelper.Watermark="Type a message..." cal:Message.Attach="[Key Enter] = [Action SendAsync]"></TextBox>
+            <Button Grid.Column="1" Margin="4" Name="SendAsync">Send</Button>
+        </Grid>
+
+    </Grid>
+</UserControl>

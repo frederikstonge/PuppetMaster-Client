@@ -1,0 +1,8 @@
+﻿using Caliburn.Micro;
+
+namespace PuppetMaster.Client.UI.ViewModels
+{
+    public interface IGameShellTabItem : IScreen
+    {
+    }
+}
