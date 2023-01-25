@@ -124,15 +124,15 @@ namespace PuppetMaster.Client.UI.ViewModels
         {
             if (close)
             {
+                await _gameService.StopHubAsync();
                 _gameService.ChatMessageEvent -= OnChatMessageEvent;
                 _gameService.RoomChangedEvent -= OnRoomChangedEvent;
                 _gameService.MatchChangedEvent -= OnMatchChangedEvent;
+
                 if (_room != null)
                 {
                     await _gameService.LeaveRoomAsync(_room!.Id);
                 }
-
-                await _gameService.StopHubAsync();
             }
 
             await base.OnDeactivateAsync(close, cancellationToken);

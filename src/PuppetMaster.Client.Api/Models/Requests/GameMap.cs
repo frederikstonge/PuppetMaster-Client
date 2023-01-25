@@ -26,6 +26,9 @@ namespace PuppetMaster.Client.Valorant.Api.Models.Requests
         Canyon,
 
         [Description("Pearl")]
-        Pitt
+        Pitt,
+
+        [Description("Lotus")]
+        Jam,
     }
 }
