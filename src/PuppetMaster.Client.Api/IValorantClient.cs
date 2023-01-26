@@ -26,7 +26,7 @@ namespace PuppetMaster.Client.Valorant.Api
 
         PartyResponse LeaveCurrentParty(string partyId);
 
-        void SetCustomGameSettings(string partyId, GameMap map);
+        void SetCustomGameSettings(string partyId, string map);
 
         void SetPartyOpen(string partyId);
 

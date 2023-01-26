@@ -1,17 +1,16 @@
 ﻿using System;
-using PuppetMaster.Client.Valorant.Api.Models.Requests;
 
 namespace PuppetMaster.Client.UI.Models.Events
 {
     public class SetupLobbyEventArgs : EventArgs
     {
-        public SetupLobbyEventArgs(GameMap gameMap, Guid matchId)
+        public SetupLobbyEventArgs(string map, Guid matchId)
         {
-            GameMap = gameMap;
+            Map = map;
             MatchId = matchId;
         }
 
-        public GameMap GameMap { get; set; }
+        public string Map { get; set; }
 
         public Guid MatchId { get; set; }
     }

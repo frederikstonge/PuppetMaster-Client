@@ -222,7 +222,7 @@ namespace PuppetMaster.Client.UI.Services
         private void SetupLobbyEvent(object? sender, SetupLobbyEventArgs e)
         {
             var party = _valorantClient.GetParty();
-            _valorantClient.SetCustomGameSettings(party.CurrentPartyId, e.GameMap);
+            _valorantClient.SetCustomGameSettings(party.CurrentPartyId, e.Map);
             _valorantClient.StartCustomGame(party.CurrentPartyId);
         }
 

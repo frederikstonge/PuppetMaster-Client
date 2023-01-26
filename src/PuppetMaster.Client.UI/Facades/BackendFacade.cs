@@ -444,7 +444,7 @@ namespace PuppetMaster.Client.UI.Facades
         private void SetupLobby(SetupLobbyMessage setupLobby)
         {
             var handler = SetupLobbyEvent;
-            handler?.Invoke(this, new SetupLobbyEventArgs(setupLobby.Map, setupLobby.MatchId));
+            handler?.Invoke(this, new SetupLobbyEventArgs(setupLobby.Map!, setupLobby.MatchId));
         }
 
         private void MatchEnded(MatchEndedMessage matchEnded)

@@ -135,7 +135,7 @@ namespace PuppetMaster.Client.Valorant.Api
             _gameService.GlzCall(endpoint, Method.Post);
         }
         
-        public void SetCustomGameSettings(string partyId, GameMap map)
+        public void SetCustomGameSettings(string partyId, string map)
         {
             if (_gameService == null)
             {
@@ -143,10 +143,9 @@ namespace PuppetMaster.Client.Valorant.Api
             }
 
             var bestServer = GetBestServerForParty(partyId);
-            var mapString = map.ToString("G");
             var body = new CustomGameSettings
             {
-                Map = $"/Game/Maps/{mapString}/{mapString}",
+                Map = $"/Game/Maps/{map}/{map}",
                 Mode = "/Game/GameModes/Bomb/BombGameMode.BombGameMode_C",
                 UseBots = false,
                 GamePod = bestServer,

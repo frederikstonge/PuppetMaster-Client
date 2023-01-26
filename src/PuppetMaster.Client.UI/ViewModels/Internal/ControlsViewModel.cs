@@ -243,7 +243,7 @@ namespace PuppetMaster.Client.UI.ViewModels.Internal
                 await GetParty();
             }
 
-            _client.SetCustomGameSettings(PartyId!, SelectedMap);
+            _client.SetCustomGameSettings(PartyId!, SelectedMap.ToString());
         }
 
         public async Task ConfigureNewGame()
@@ -258,7 +258,7 @@ namespace PuppetMaster.Client.UI.ViewModels.Internal
             PartyId = party.CurrentPartyId;
             _client.SetPartyOpen(party.CurrentPartyId);
             _client.SetPartyToCustomGame(party.CurrentPartyId);
-            _client.SetCustomGameSettings(party.CurrentPartyId, SelectedMap);
+            _client.SetCustomGameSettings(party.CurrentPartyId, SelectedMap.ToString());
         }
 
         public async Task StartCustomGame()
