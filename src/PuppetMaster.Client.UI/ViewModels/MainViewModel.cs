@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using PuppetMaster.Client.UI.Facades;
+using PuppetMaster.Client.UI.Properties;
 using PuppetMaster.Client.UI.Services;
 using PuppetMaster.Client.UI.ViewModels.Internal;
 
@@ -25,54 +26,57 @@ namespace PuppetMaster.Client.UI.ViewModels
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-            var games = await _backendFacade.GetGamesAsync();
-
-            foreach (var game in games)
+            if (!Settings.Default.StandaloneTool)
             {
-                var gameService = IoC.Get<IGameService>(game.Name);
-                if (gameService == null)
+                var games = await _backendFacade.GetGamesAsync();
+
+                foreach (var game in games)
                 {
-                    continue;
+                    var gameService = IoC.Get<IGameService>(game.Name);
+                    if (gameService == null)
+                    {
+                        continue;
+                    }
+
+                    await gameService.InitializeAsync();
+
+                    var container = _bootstrapper.Container.CreateChildContainer();
+                    if (container == null)
+                    {
+                        throw new InvalidOperationException("Container not found");
+                    }
+
+                    games.ForEach(g => container.UnregisterHandler<IGameService>(g.Name));
+
+                    container.Singleton<IMainPaneItem, GameShellViewModel>();
+                    container.Singleton<IGameShellTabItem, RoomsViewModel>();
+                    container.Singleton<IGameShellTabItem, ScrimsViewModel>();
+                    container.PerRequest<RoomViewModel>();
+                    container.PerRequest<MatchViewModel>();
+                    container.PerRequest<PlayerPickViewModel>();
+                    container.PerRequest<VoteMapViewModel>();
+                    container.Instance(gameService);
+                    container.Instance(container);
+
+                    var viewModel = container.GetInstance<IMainPaneItem>();
+                    if (viewModel == null)
+                    {
+                        throw new InvalidOperationException("GameShellViewModel not found in child container");
+                    }
+
+                    _containers.Add(game.Name, container);
+                    Items.Add(viewModel);
                 }
 
-                await gameService.InitializeAsync();
-
-                var container = _bootstrapper.Container.CreateChildContainer();
-                if (container == null)
-                {
-                    throw new InvalidOperationException("Container not found");
-                }
-
-                games.ForEach(g => container.UnregisterHandler<IGameService>(g.Name));
-
-                container.Singleton<IMainPaneItem, GameShellViewModel>();
-                container.Singleton<IGameShellTabItem, RoomsViewModel>();
-                container.Singleton<IGameShellTabItem, ScrimsViewModel>();
-                container.PerRequest<RoomViewModel>();
-                container.PerRequest<MatchViewModel>();
-                container.PerRequest<PlayerPickViewModel>();
-                container.PerRequest<VoteMapViewModel>();
-                container.Instance(gameService);
-                container.Instance(container);
-
-                var viewModel = container.GetInstance<IMainPaneItem>();
-                if (viewModel == null)
-                {
-                    throw new InvalidOperationException("GameShellViewModel not found in child container");
-                }
-
-                _containers.Add(game.Name, container);
-                Items.Add(viewModel);
+                var accountViewModel = IoC.Get<AccountViewModel>();
+                await accountViewModel.InitializeAsync();
+                Items.Add(accountViewModel);
             }
-
-            var accountViewModel = IoC.Get<AccountViewModel>();
-            await accountViewModel.InitializeAsync();
-            Items.Add(accountViewModel);
-
-#if DEBUG
-            var internalViewModel = IoC.Get<InternalShellViewModel>();
-            Items.Add(internalViewModel);
-#endif
+            else
+            {
+                var internalViewModel = IoC.Get<InternalShellViewModel>();
+                Items.Add(internalViewModel);
+            }
 
             if (Items.Any())
             {

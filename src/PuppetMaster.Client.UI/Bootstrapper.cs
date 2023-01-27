@@ -8,6 +8,7 @@ using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Xaml.Behaviors.Input;
 using PuppetMaster.Client.UI.Facades;
 using PuppetMaster.Client.UI.Messages;
+using PuppetMaster.Client.UI.Properties;
 using PuppetMaster.Client.UI.Services;
 using PuppetMaster.Client.UI.ViewModels;
 using PuppetMaster.Client.UI.ViewModels.Internal;
@@ -49,20 +50,23 @@ namespace PuppetMaster.Client.UI
             _container.Singleton<ShellViewModel>();
             _container.Singleton<MainViewModel>();
 
-            _container.Singleton<LoginRegisterViewModel>();
-            _container.PerRequest<LoginViewModel>();
-            _container.PerRequest<RegisterViewModel>();
+            if (Settings.Default.StandaloneTool)
+            {
+                _container.Singleton<InternalShellViewModel>();
+                _container.Singleton<IInternalShellTabItem, ControlsViewModel>();
+            }
+            else
+            {
+                _container.Singleton<LoginRegisterViewModel>();
+                _container.PerRequest<LoginViewModel>();
+                _container.PerRequest<RegisterViewModel>();
 
-            _container.Singleton<AccountViewModel>();
-            _container.PerRequest<UpdateUserViewModel>();
-            _container.PerRequest<ChangePasswordViewModel>();
+                _container.Singleton<AccountViewModel>();
+                _container.PerRequest<UpdateUserViewModel>();
+                _container.PerRequest<ChangePasswordViewModel>();
 
-            _container.Singleton<IGameService, ValorantGameService>(ValorantGameService.GameName);
-
-#if DEBUG
-            _container.Singleton<InternalShellViewModel>();
-            _container.Singleton<IInternalShellTabItem, ControlsViewModel>();
-#endif
+                _container.Singleton<IGameService, ValorantGameService>(ValorantGameService.GameName);
+            }
 
             // Valorant specific
             var valorantClient = new ValorantClient();

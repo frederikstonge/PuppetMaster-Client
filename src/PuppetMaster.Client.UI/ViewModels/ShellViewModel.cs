@@ -7,7 +7,7 @@ using Caliburn.Micro;
 using MahApps.Metro.Controls.Dialogs;
 using PuppetMaster.Client.UI.Facades;
 using PuppetMaster.Client.UI.Messages;
-using Squirrel;
+using PuppetMaster.Client.UI.Properties;
 
 namespace PuppetMaster.Client.UI.ViewModels
 {
@@ -111,14 +111,14 @@ namespace PuppetMaster.Client.UI.ViewModels
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-            var loginMessage = string.Empty;
-            var settings = new LoginDialogSettings()
+            if (await _backendFacade.LoginIsNeededAsync() && !Settings.Default.StandaloneTool)
             {
-                NegativeButtonVisibility = Visibility.Visible
-            };
+                var loginMessage = string.Empty;
+                var settings = new LoginDialogSettings()
+                {
+                    NegativeButtonVisibility = Visibility.Visible
+                };
 
-            if (await _backendFacade.LoginIsNeededAsync())
-            {
                 _loginRegisterViewModel = IoC.Get<LoginRegisterViewModel>();
                 if (_loginRegisterViewModel != null)
                 {
