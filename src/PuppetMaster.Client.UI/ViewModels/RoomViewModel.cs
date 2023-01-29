@@ -128,10 +128,16 @@ namespace PuppetMaster.Client.UI.ViewModels
                 _gameService.ChatMessageEvent -= OnChatMessageEvent;
                 _gameService.RoomChangedEvent -= OnRoomChangedEvent;
                 _gameService.MatchChangedEvent -= OnMatchChangedEvent;
-
                 if (_room != null)
                 {
-                    await _gameService.LeaveRoomAsync(_room!.Id);
+                    try
+                    {
+                        await _gameService.LeaveRoomAsync(_room!.Id);
+                    }
+                    catch
+                    {
+                        // Already left from StopHubAsync();
+                    }
                 }
             }
 
