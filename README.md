@@ -6,7 +6,7 @@
 
 - 2 teams, 2 captains draft
 - Vote map
-- Rooms with password, chat and ready system
+- Public/Private Rooms with chat and ready system
 - Automated lobby management with API (Create, join, set map, start)
 
 ![image](https://user-images.githubusercontent.com/5427239/180104108-a546e0a8-7356-45f9-bbcb-1edaab49391a.png)
