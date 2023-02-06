@@ -22,7 +22,10 @@ namespace PuppetMaster.Client.UI.ViewModels
 
         private async void OnMatchEndedEvent(object? sender, Models.Events.MatchEndedEventArgs e)
         {
-            await TryCloseAsync();
+            await Execute.OnUIThreadAsync(async () =>
+            {
+                await TryCloseAsync();
+            });
         }
     }
 }

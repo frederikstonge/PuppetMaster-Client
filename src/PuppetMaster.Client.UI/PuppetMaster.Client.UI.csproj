@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
 	<RuntimeIdentifier>win-x86</RuntimeIdentifier>
 	<Version>1.0.0</Version>
 	<CodeAnalysisRuleSet>../../stylecop.ruleset</CodeAnalysisRuleSet>
@@ -18,14 +18,14 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Caliburn.Micro" Version="4.0.210" />
+    <PackageReference Include="Caliburn.Micro" Version="4.0.212" />
     <PackageReference Include="Clowd.Squirrel" Version="2.9.42" />
-    <PackageReference Include="IdentityModel.OidcClient" Version="5.0.0" />
+    <PackageReference Include="IdentityModel.OidcClient" Version="5.2.1" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
     <PackageReference Include="MahApps.Metro.IconPacks.Modern" Version="4.11.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.7" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="6.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="7.0.2" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

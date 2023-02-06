@@ -171,50 +171,59 @@ namespace PuppetMaster.Client.UI.ViewModels
 
         private async void OnMatchChangedEvent(object? sender, Models.Events.MatchChangedEventArgs e)
         {
-            if (_matchViewModel == null)
+            await Execute.OnUIThreadAsync(async () =>
             {
-                await OpenMatchViewAsync();
-            }
-
-            if (e.Match.AvailablePlayers.Any())
-            {
-                if (_playerPickViewModel == null)
+                if (_matchViewModel == null)
                 {
-                    _playerPickViewModel = _container.GetInstance<PlayerPickViewModel>();
-                    await _playerPickViewModel.InitializeAsync(e.Match);
-                    var message = new PlayerPickMessage(_playerPickViewModel);
+                    await OpenMatchViewAsync();
+                }
+
+                if (e.Match.AvailablePlayers.Any())
+                {
+                    if (_playerPickViewModel == null)
+                    {
+                        _playerPickViewModel = _container.GetInstance<PlayerPickViewModel>();
+                        await _playerPickViewModel.InitializeAsync(e.Match);
+                        var message = new PlayerPickMessage(_playerPickViewModel);
+                        await _eventAggregator.PublishOnUIThreadAsync(message);
+                    }
+                }
+                else
+                {
+                    _playerPickViewModel = null;
+                    var votemapViewModel = _container.GetInstance<VoteMapViewModel>();
+                    await votemapViewModel.InitializeAsync(e.Match);
+                    var message = new VoteMapMessage(votemapViewModel);
                     await _eventAggregator.PublishOnUIThreadAsync(message);
                 }
-            }
-            else
-            {
-                _playerPickViewModel = null;
-                var votemapViewModel = _container.GetInstance<VoteMapViewModel>();
-                await votemapViewModel.InitializeAsync(e.Match);
-                var message = new VoteMapMessage(votemapViewModel);
-                await _eventAggregator.PublishOnUIThreadAsync(message);
-            }
+            });
         }
 
         private void OnChatMessageEvent(object? sender, Models.Events.ChatMessageEventArgs e)
         {
-            var paragraph = new Paragraph
+            Execute.OnUIThread(() =>
             {
-                Margin = new Thickness(0)
-            };
-            var fromRun = new Run($"{e.ChatMessage.From}: ")
-            {
-                FontWeight = FontWeights.Bold
-            };
-            paragraph.Inlines.Add(fromRun);
-            paragraph.Inlines.Add(new Run(e.ChatMessage.Message));
-            Messages.Blocks.Add(paragraph);
-            NotifyOfPropertyChange(() => Messages);
+                var paragraph = new Paragraph
+                {
+                    Margin = new Thickness(0)
+                };
+                var fromRun = new Run($"{e.ChatMessage.From}: ")
+                {
+                    FontWeight = FontWeights.Bold
+                };
+                paragraph.Inlines.Add(fromRun);
+                paragraph.Inlines.Add(new Run(e.ChatMessage.Message));
+                Messages.Blocks.Add(paragraph);
+                NotifyOfPropertyChange(() => Messages);
+            });
         }
 
         private async void OnRoomChangedEvent(object? sender, Models.Events.RoomChangedEventArgs e)
         {
-            await SetRoom(e.Room);
+            await Execute.OnUIThreadAsync(async () =>
+            {
+                await SetRoom(e.Room);
+            });
         }
 
         private async Task SetRoom(Room room)

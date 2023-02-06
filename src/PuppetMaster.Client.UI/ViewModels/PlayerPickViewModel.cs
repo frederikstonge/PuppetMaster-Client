@@ -132,14 +132,17 @@ namespace PuppetMaster.Client.UI.ViewModels
 
         private async void MatchChangedEvent(object? sender, Models.Events.MatchChangedEventArgs e)
         {
-            if (e.Match.AvailablePlayers.Any())
+            await Execute.OnUIThreadAsync(async () =>
             {
-                await InitializeAsync(e.Match);
-            }
-            else
-            {
-                await TryCloseAsync();
-            }
+                if (e.Match.AvailablePlayers.Any())
+                {        
+                    await InitializeAsync(e.Match);          
+                }
+                else
+                {
+                    await TryCloseAsync();
+                }
+            });
         }
 
         private void DecreaseTime(object? state)

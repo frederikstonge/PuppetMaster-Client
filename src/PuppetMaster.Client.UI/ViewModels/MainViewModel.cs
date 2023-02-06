@@ -32,6 +32,12 @@ namespace PuppetMaster.Client.UI.ViewModels
 
                 foreach (var game in games)
                 {
+                    var container = _bootstrapper.Container.CreateChildContainer();
+                    if (container == null)
+                    {
+                        throw new InvalidOperationException("Container not found");
+                    }
+
                     var gameService = IoC.Get<IGameService>(game.Name);
                     if (gameService == null)
                     {
@@ -40,13 +46,8 @@ namespace PuppetMaster.Client.UI.ViewModels
 
                     await gameService.InitializeAsync();
 
-                    var container = _bootstrapper.Container.CreateChildContainer();
-                    if (container == null)
-                    {
-                        throw new InvalidOperationException("Container not found");
-                    }
-
                     games.ForEach(g => container.UnregisterHandler<IGameService>(g.Name));
+                    container.Instance(gameService);
 
                     container.Singleton<IMainPaneItem, GameShellViewModel>();
                     container.Singleton<IGameShellTabItem, RoomsViewModel>();
@@ -55,7 +56,7 @@ namespace PuppetMaster.Client.UI.ViewModels
                     container.PerRequest<MatchViewModel>();
                     container.PerRequest<PlayerPickViewModel>();
                     container.PerRequest<VoteMapViewModel>();
-                    container.Instance(gameService);
+
                     container.Instance(container);
 
                     var viewModel = container.GetInstance<IMainPaneItem>();
