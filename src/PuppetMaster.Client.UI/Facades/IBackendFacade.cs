@@ -50,6 +50,8 @@ namespace PuppetMaster.Client.UI.Facades
 
         Task ReadyRoomAsync(Guid id, bool isReady);
 
+        Task<Match?> GetMatchAsync(Guid matchId);
+
         Task HasJoinedAsync(Guid id);
 
         Task PickPlayerAsync(Guid id, PickPlayerRequest request);

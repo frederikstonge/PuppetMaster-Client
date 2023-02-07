@@ -130,13 +130,17 @@ namespace PuppetMaster.Client.UI.ViewModels
                 _gameService.MatchChangedEvent -= OnMatchChangedEvent;
                 if (_room != null)
                 {
-                    try
+                    var room = await _gameService.GetRoomAsync(_room!.Id);
+                    if (room != null && room.MatchId == null)
                     {
-                        await _gameService.LeaveRoomAsync(_room!.Id);
-                    }
-                    catch
-                    {
-                        // Already left from StopHubAsync();
+                        try
+                        {
+                            await _gameService.LeaveRoomAsync(room.Id);
+                        }
+                        catch
+                        {
+                            // Already left from StopHubAsync();
+                        }
                     }
                 }
             }

@@ -166,6 +166,12 @@ namespace PuppetMaster.Client.UI.Facades
             return MakeRequestAsync(endpoint, HttpMethod.Put);
         }
 
+        public Task<Match?> GetMatchAsync(Guid matchId)
+        {
+            var endpoint = $"/api/matches/{matchId}";
+            return MakeRequestAsync<Match>(endpoint, HttpMethod.Get);
+        }
+
         public Task HasJoinedAsync(Guid id)
         {
             var endpoint = $"api/matches/{id}/join";

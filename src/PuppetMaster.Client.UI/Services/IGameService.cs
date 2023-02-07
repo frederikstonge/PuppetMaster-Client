@@ -50,6 +50,8 @@ namespace PuppetMaster.Client.UI.Services
 
         Task ReadyRoomAsync(Guid id, bool isReady);
 
+        Task<Match?> GetMatchAsync(Guid matchId);
+
         Task PickPlayerAsync(Guid id, PickPlayerRequest request);
 
         Task VoteMapAsync(Guid id, VoteMapRequest request);

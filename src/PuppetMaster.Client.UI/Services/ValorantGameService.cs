@@ -132,6 +132,11 @@ namespace PuppetMaster.Client.UI.Services
             return _backEndFacade.LeaveRoomAsync(id);
         }
 
+        public Task<Match?> GetMatchAsync(Guid matchId)
+        {
+            return _backEndFacade.GetMatchAsync(matchId);
+        }
+
         public Task ReadyRoomAsync(Guid id, bool isReady)
         {
             return _backEndFacade.ReadyRoomAsync(id, isReady);
@@ -280,11 +285,10 @@ namespace PuppetMaster.Client.UI.Services
                     if (room?.MatchId != null)
                     {
                         _valorantClient.SetGameToForeground();
+                        return;
                     }
-                    else
-                    {
-                        await ValidateUserInGameAsync(user);
-                    }
+
+                    await ValidateUserInGameAsync(user, room!);
                 }
             }
             catch
@@ -297,23 +301,24 @@ namespace PuppetMaster.Client.UI.Services
         {
             try
             {
-                var oldMatch = _valorantMatchId;
-                var playerInfo = _valorantClient.GetPlayerInformation();
-                var coreGamePlayer = _valorantClient.CoreGameFetchPlayer(playerInfo.PlayerUniqueId);
-                _valorantMatchId = coreGamePlayer.MatchId;
-
                 var user = await GetUserAsync();
                 if (user?.RoomId != null)
                 {
+                    var playerInfo = _valorantClient.GetPlayerInformation();
+                    var coreGamePlayer = _valorantClient.CoreGameFetchPlayer(playerInfo.PlayerUniqueId);
                     var room = await GetRoomAsync(user.RoomId.Value);
                     if (room?.MatchId != null)
                     {
-                        _valorantMatchStarted = true;
+                        var match = await GetMatchAsync(room.MatchId.Value);
+                        if (match!.MatchTeams!.SelectMany(mt => mt.MatchTeamUsers!).All(mtu => mtu.HasJoined))
+                        {
+                            _valorantMatchId = coreGamePlayer.MatchId;
+                            _valorantMatchStarted = true;
+                            return;
+                        }
                     }
-                    else if (_valorantMatchId != oldMatch)
-                    {
-                        await ValidateUserInGameAsync(user);
-                    }
+
+                    await ValidateUserInGameAsync(user, room!);
                 }
             }
             catch
@@ -358,9 +363,10 @@ namespace PuppetMaster.Client.UI.Services
             _valorantMatchId = null;
         }
 
-        private async Task ValidateUserInGameAsync(User? user)
+        private async Task ValidateUserInGameAsync(User user, Room room)
         {
-            if (user?.RoomId != null)
+            var roomUser = room.RoomUsers?.FirstOrDefault(ru => ru.ApplicationUserId == user.Id);
+            if (user.RoomId.HasValue && roomUser != null && roomUser.IsReady)
             {
                 // Unready a player that joins a game
                 await _backEndFacade.ReadyRoomAsync(user.RoomId.Value, false);
