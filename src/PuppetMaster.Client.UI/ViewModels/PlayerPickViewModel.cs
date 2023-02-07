@@ -117,9 +117,7 @@ namespace PuppetMaster.Client.UI.ViewModels
                 .SelectMany(mt => mt.MatchTeamUsers!)
                 .Select(mtu => mtu.ApplicationUser!)
                 .FirstOrDefault(a => a.Id == roomMatchMessage.CaptainToPickThisTurn)
-                ?.UserName;
-
-            
+                ?.UserName;      
 
             if (_timer != null)
             {

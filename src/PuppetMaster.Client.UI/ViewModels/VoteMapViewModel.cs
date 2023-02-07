@@ -10,7 +10,7 @@ using PuppetMaster.Client.UI.Services;
 
 namespace PuppetMaster.Client.UI.ViewModels
 {
-    public class VoteMapViewModel : Screen, IShellItem
+    public class VoteMapViewModel : Screen, IShellItem, IDisposable
     {
         private readonly IGameService _gameService;
         private Timer? _timer;
@@ -88,6 +88,13 @@ namespace PuppetMaster.Client.UI.ViewModels
                 ElaspedTime = roomMatchMessage.Delay.Value.Seconds;
                 _timer = new Timer(DecreaseTime, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
             }
+        }
+
+        public void Dispose()
+        {
+            _timer?.Dispose();
+            _timer = null;
+            GC.SuppressFinalize(this);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("AsyncUsage", "AsyncFixer03:Fire-and-forget async-void methods or delegates", Justification = "Needed")]
