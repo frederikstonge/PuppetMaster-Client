@@ -16,8 +16,8 @@ namespace PuppetMaster.Client.UI.ViewModels
         private readonly IGameService _gameService;
         private Timer? _timer;
         private int _elaspedTime;
-        private bool _canPick;
-        private User? _selectedAvailablePlayer;
+        private bool _captainToPickThisTurnIsMe;
+        private PlayerPickUserViewModel? _selectedAvailablePlayer;
         private string? _captainToPickThisTurn;
         private Match? _match;
 
@@ -26,12 +26,12 @@ namespace PuppetMaster.Client.UI.ViewModels
             DisplayName = "Player Selection";
             _gameService = gameService;
             _gameService.MatchChangedEvent += MatchChangedEvent;
-            AvailablePlayers = new ObservableCollection<User>();
+            AvailablePlayers = new ObservableCollection<PlayerPickUserViewModel>();
         }
 
-        public ObservableCollection<User> AvailablePlayers { get; set; }
+        public ObservableCollection<PlayerPickUserViewModel> AvailablePlayers { get; set; }
 
-        public User? SelectedAvailablePlayer
+        public PlayerPickUserViewModel? SelectedAvailablePlayer
         {
             get => _selectedAvailablePlayer;
             set
@@ -58,14 +58,20 @@ namespace PuppetMaster.Client.UI.ViewModels
             }
         }
 
-        public bool CanPick 
+        public bool CaptainToPickThisTurnIsMe
         {
-            get => SelectedAvailablePlayer != null && _canPick;
+            get => _captainToPickThisTurnIsMe;
             set
             {
-                _canPick = value;
+                _captainToPickThisTurnIsMe = value;
+                NotifyOfPropertyChange(() => CaptainToPickThisTurnIsMe);
                 NotifyOfPropertyChange(() => CanPick);
             }
+        }
+
+        public bool CanPick 
+        {
+            get => SelectedAvailablePlayer != null && CaptainToPickThisTurnIsMe;
         }
 
         public int ElaspedTime
@@ -87,17 +93,25 @@ namespace PuppetMaster.Client.UI.ViewModels
 
             await _gameService.PickPlayerAsync(_match!.Id, new PickPlayerRequest()
             {
-                PickedUserId = SelectedAvailablePlayer!.Id
+                PickedUserId = SelectedAvailablePlayer!.User.Id
             });
 
-            CanPick = false;
+            CaptainToPickThisTurnIsMe = false;
         }
 
         public async Task InitializeAsync(RoomMatchMessage roomMatchMessage)
         {
             _match = roomMatchMessage.Match;
             var user = await _gameService.GetUserAsync();
-            CanPick = roomMatchMessage.CaptainToPickThisTurn.HasValue && roomMatchMessage.CaptainToPickThisTurn.Value == user!.Id;
+
+            AvailablePlayers.Clear();
+            foreach (var player in roomMatchMessage.AvailablePlayers)
+            {
+                AvailablePlayers.Add(new PlayerPickUserViewModel(player));
+            }
+
+            CaptainToPickThisTurnIsMe = roomMatchMessage.CaptainToPickThisTurn.HasValue && 
+                                        roomMatchMessage.CaptainToPickThisTurn.Value == user!.Id;
 
             CaptainToPickThisTurn = _match!.MatchTeams!
                 .SelectMany(mt => mt.MatchTeamUsers!)
@@ -105,11 +119,7 @@ namespace PuppetMaster.Client.UI.ViewModels
                 .FirstOrDefault(a => a.Id == roomMatchMessage.CaptainToPickThisTurn)
                 ?.UserName;
 
-            AvailablePlayers.Clear();
-            foreach (var player in roomMatchMessage.AvailablePlayers)
-            {
-                AvailablePlayers.Add(player);
-            }
+            
 
             if (_timer != null)
             {
@@ -126,6 +136,8 @@ namespace PuppetMaster.Client.UI.ViewModels
 
         public void Dispose()
         {
+            _timer?.Dispose();
+            _timer = null;
             _gameService.MatchChangedEvent -= MatchChangedEvent;
             GC.SuppressFinalize(this);
         }
