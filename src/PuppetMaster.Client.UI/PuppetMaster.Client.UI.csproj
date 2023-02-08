@@ -130,6 +130,6 @@
   </ItemGroup>
 
   <Target Name="PostPublish" AfterTargets="Publish">
-    <Exec Command="$(USERPROFILE)\.nuget\packages\clowd.squirrel\2.9.42\tools\Squirrel.exe pack --packId &quot;PuppetMaster&quot; --packVersion &quot;$(Version)&quot; --packDirectory &quot;$(ProjectDir)\bin\Release\net6.0-windows\win-x86\publish&quot;" />
+    <Exec Command="$(USERPROFILE)\.nuget\packages\clowd.squirrel\2.9.42\tools\Squirrel.exe pack --packId &quot;PuppetMaster&quot; --packVersion &quot;$(Version)&quot; --packDirectory &quot;$(ProjectDir)\bin\Release\net7.0-windows\win-x86\publish&quot; --icon=&quot;greenblue.ico&quot;" />
   </Target>
 </Project>
