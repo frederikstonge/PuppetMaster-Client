@@ -26,7 +26,6 @@ namespace PuppetMaster.Client.UI.Services
         private readonly IBackendFacade _backEndFacade;
         private readonly IValorantClient _valorantClient;
         private readonly IEventAggregator _eventAggregator;
-        private bool _valorantMatchStarted;
         private string? _valorantMatchId;
 
         public ValorantGameService(IBackendFacade backEndFacade, IValorantClient valorantClient, IEventAggregator eventAggregator)
@@ -34,6 +33,7 @@ namespace PuppetMaster.Client.UI.Services
             _backEndFacade = backEndFacade;
             _valorantClient = valorantClient;
             _eventAggregator = eventAggregator;
+            LobbyStatus = LobbyStatus.InRoom;
             _valorantClient.ProcessStateChangeEvent += ProcessStateChangeEvent;
             _valorantClient.LogMessageEvent += LogMessageEvent;
             _backEndFacade.ChatMessageEvent += OnChatMessageEvent;
@@ -54,6 +54,8 @@ namespace PuppetMaster.Client.UI.Services
         public event EventHandler<MatchEndedEventArgs>? MatchEndedEvent;
 
         public event EventHandler<GameStateEventArgs>? GameStateEvent;
+
+        public LobbyStatus LobbyStatus { get; set; }
 
         public Game? Game { get; private set; }
 
@@ -205,6 +207,15 @@ namespace PuppetMaster.Client.UI.Services
 
         private void OnMatchChangedEvent(object? sender, MatchChangedEventArgs e)
         {
+            if (e.Match.AvailablePlayers.Any())
+            {
+                LobbyStatus = LobbyStatus.PlayerPick;
+            }
+            else
+            {
+                LobbyStatus = LobbyStatus.VoteMap;
+            }
+
             var handler = MatchChangedEvent;
             handler?.Invoke(sender, e);
         }
@@ -304,16 +315,16 @@ namespace PuppetMaster.Client.UI.Services
                 var user = await GetUserAsync();
                 if (user?.RoomId != null)
                 {
-                    var playerInfo = _valorantClient.GetPlayerInformation();
-                    var coreGamePlayer = _valorantClient.CoreGameFetchPlayer(playerInfo.PlayerUniqueId);
                     var room = await GetRoomAsync(user.RoomId.Value);
                     if (room?.MatchId != null)
                     {
                         var match = await GetMatchAsync(room.MatchId.Value);
                         if (match!.MatchTeams!.SelectMany(mt => mt.MatchTeamUsers!).All(mtu => mtu.HasJoined))
                         {
+                            var playerInfo = _valorantClient.GetPlayerInformation();
+                            var coreGamePlayer = _valorantClient.CoreGameFetchPlayer(playerInfo.PlayerUniqueId);
                             _valorantMatchId = coreGamePlayer.MatchId;
-                            _valorantMatchStarted = true;
+                            LobbyStatus = LobbyStatus.InMatch;
                             return;
                         }
                     }
@@ -329,7 +340,7 @@ namespace PuppetMaster.Client.UI.Services
 
         private async Task MatchEndedAsync()
         {
-            if (_valorantMatchStarted)
+            if (LobbyStatus == LobbyStatus.InMatch)
             {
                 var user = await GetUserAsync();
                 if (user?.RoomId != null)
@@ -348,18 +359,18 @@ namespace PuppetMaster.Client.UI.Services
                 }
             }
 
-            _valorantMatchStarted = false;
+            LobbyStatus = LobbyStatus.InRoom;
             _valorantMatchId = null;
         }
 
         private void MatchLeft()
         {
-            if (_valorantMatchStarted)
+            if (LobbyStatus == LobbyStatus.InMatch)
             {
                 // Player left before end of match
             }
 
-            _valorantMatchStarted = false;
+            LobbyStatus = LobbyStatus.InRoom;
             _valorantMatchId = null;
         }
 
