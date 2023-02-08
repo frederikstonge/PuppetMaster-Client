@@ -11,7 +11,12 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
 	<PackageId>PuppetMaster</PackageId>
 	<SignAssembly>False</SignAssembly>
+	<ApplicationIcon>greenblue.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="greenblue.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="1.6.0">
