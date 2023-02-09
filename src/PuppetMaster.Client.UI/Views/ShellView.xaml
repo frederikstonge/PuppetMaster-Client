@@ -8,6 +8,7 @@
         xmlns:cal="http://caliburnmicro.com"
         WindowStartupLocation="CenterScreen"
         Dialog:DialogParticipation.Register="{Binding}"
+        Icon="/greenblue.ico"
         mc:Ignorable="d"
         MinHeight="700"
         MinWidth="820"

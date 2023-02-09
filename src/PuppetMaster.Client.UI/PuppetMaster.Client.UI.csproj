@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="greenblue.ico" />
+    <Resource Include="greenblue.ico" />
   </ItemGroup>
 
   <ItemGroup>
