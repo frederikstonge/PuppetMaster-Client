@@ -50,18 +50,13 @@ jobs:
       - name: dotnet publish
         run: dotnet publish -c Release
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/Releases
       - name: Create Release
         # You may pin to the exact commit or the version.
         # uses: ncipollo/release-action@a2e71bdd4e7dab70ca26a852f29600c98b33153e
         uses: ncipollo/release-action@v1.12.0
         with:
           # An optional set of paths representing artifacts to upload to the release. This may be a single path or a comma delimited list of paths (or globs)
-          artifact: ${{env.DOTNET_ROOT}}/Releases
+          artifact: Releases
           name: "Version ${{ steps.get_version.outputs.RELEASE_VERSION }}" # optional, default is 
           # An optional tag for the release. If this is omitted the git ref will be used (if it is a tag).
           tag: "${{ steps.get_version.outputs.RELEASE_VERSION }}"
