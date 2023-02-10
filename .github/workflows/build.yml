@@ -1,5 +1,5 @@
 env:
-  DOTNET_VERSION: '7.0.x'                 # set this to the .NET Core version to use
+  DOTNET_VERSION: '7.0.x'
 
 on:
   push:
@@ -12,32 +12,26 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up .NET Core
+      - name: Set up .NET
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-          
+
+      - name: Build
+        run: dotnet build --configuration Release
+
+      - name: Publish
+        run: dotnet publish -c Release
+                  
       - name: Get version
         id: get_version
         uses: greenygh0st/net-proj-release-version@v1
         with:
-          
-          # Filepath of the *.csproj file, relative to root of repository
           PROJ_FILE: src/PuppetMaster.Client.UI/PuppetMaster.Client.UI.csproj
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
-
-      - name: dotnet publish
-        run: dotnet publish -c Release
-
-      - name: Create Release
-        # You may pin to the exact commit or the version.
-        # uses: ncipollo/release-action@a2e71bdd4e7dab70ca26a852f29600c98b33153e
+      - name: Create release
         uses: ncipollo/release-action@v1.12.0
         with:
-          # An optional set of paths representing artifacts to upload to the release. This may be a single path or a comma delimited list of paths (or globs)
           artifacts: src/PuppetMaster.Client.UI/Releases/*.*
-          name: "Version ${{ steps.get_version.outputs.RELEASE_VERSION }}" # optional, default is 
-          # An optional tag for the release. If this is omitted the git ref will be used (if it is a tag).
+          name: "Version ${{ steps.get_version.outputs.RELEASE_VERSION }}"
           tag: "${{ steps.get_version.outputs.RELEASE_VERSION }}"

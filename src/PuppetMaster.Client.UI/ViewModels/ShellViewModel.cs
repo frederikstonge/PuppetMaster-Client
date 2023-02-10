@@ -6,6 +6,7 @@ using System.Windows;
 using Caliburn.Micro;
 using MahApps.Metro.Controls.Dialogs;
 using PuppetMaster.Client.UI.Facades;
+using PuppetMaster.Client.UI.Helpers;
 using PuppetMaster.Client.UI.Messages;
 using PuppetMaster.Client.UI.Properties;
 
@@ -111,6 +112,8 @@ namespace PuppetMaster.Client.UI.ViewModels
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
+            await UpdateHelper.UpdateAsync();
+
             if (await _backendFacade.LoginIsNeededAsync() && !Settings.Default.StandaloneTool)
             {
                 var loginMessage = string.Empty;

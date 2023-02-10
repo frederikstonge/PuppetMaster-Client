@@ -2,9 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PuppetMaster.Client.UI.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="BackendUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">https://localhost:7093/</Value>
-    </Setting>
     <Setting Name="BackendTokenResponse" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -13,6 +10,12 @@
     </Setting>
     <Setting Name="StandaloneTool" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="BackendUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://puppetmaster.azurewebsites.net/</Value>
+    </Setting>
+    <Setting Name="RepositoryUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://github.com/frederikstonge/PuppetMaster-Client</Value>
     </Setting>
   </Settings>
 </SettingsFile>

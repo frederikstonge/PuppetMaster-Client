@@ -9,15 +9,11 @@
 - Public/Private Rooms with chat and ready system
 - Automated lobby management with API (Create, join, set map, start)
 
-![image](https://user-images.githubusercontent.com/5427239/180104108-a546e0a8-7356-45f9-bbcb-1edaab49391a.png)
-
 ## Disclaimer
 
 This project is not affiliated nor approved by Riot Games.
 
 It won't be flagged as a cheat by Vanguard because it doesn't inject itself or read the game's memory.
-
-It requires a server to be running, which I don't host. Here's the server project : [PuppetMaster.WebApi](https://github.com/frederikstonge/PuppetMaster-WebApi)
 
 
 ## Technologies

@@ -25,18 +25,6 @@ namespace PuppetMaster.Client.UI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://localhost:7093/")]
-        public string BackendUrl {
-            get {
-                return ((string)(this["BackendUrl"]));
-            }
-            set {
-                this["BackendUrl"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string BackendTokenResponse {
             get {
@@ -67,6 +55,30 @@ namespace PuppetMaster.Client.UI.Properties {
             }
             set {
                 this["StandaloneTool"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://puppetmaster.azurewebsites.net/")]
+        public string BackendUrl {
+            get {
+                return ((string)(this["BackendUrl"]));
+            }
+            set {
+                this["BackendUrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://github.com/frederikstonge/PuppetMaster-Client")]
+        public string RepositoryUrl {
+            get {
+                return ((string)(this["RepositoryUrl"]));
+            }
+            set {
+                this["RepositoryUrl"] = value;
             }
         }
     }

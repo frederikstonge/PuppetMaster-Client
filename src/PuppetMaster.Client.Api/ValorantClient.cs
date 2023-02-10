@@ -1,5 +1,4 @@
-﻿using PuppetMaster.Client.Valorant.Api.Extensions;
-using PuppetMaster.Client.Valorant.Api.Models.Events;
+﻿using PuppetMaster.Client.Valorant.Api.Models.Events;
 using PuppetMaster.Client.Valorant.Api.Models.Internal;
 using PuppetMaster.Client.Valorant.Api.Models.Requests;
 using PuppetMaster.Client.Valorant.Api.Models.Responses;
