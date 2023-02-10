@@ -10,18 +10,26 @@ namespace PuppetMaster.Client.UI.Helpers
         public static async Task<bool> HasUpdateAsync()
         {
             using var mgr = new GithubUpdateManager(Settings.Default.RepositoryUrl);
-            var updateInfo = await mgr.CheckForUpdate();
-            return updateInfo != null && updateInfo.ReleasesToApply.Any();
+            if (mgr.IsInstalledApp)
+            {
+                var updateInfo = await mgr.CheckForUpdate();
+                return updateInfo != null && updateInfo.ReleasesToApply.Any();
+            }
+
+            return false;
         }
 
         public static async Task UpdateAsync()
         {
             using var mgr = new GithubUpdateManager(Settings.Default.RepositoryUrl);
-            var newVersion = await mgr.UpdateApp();
-
-            if (newVersion != null)
+            if (mgr.IsInstalledApp)
             {
-                UpdateManager.RestartApp();
+                var newVersion = await mgr.UpdateApp();
+
+                if (newVersion != null)
+                {
+                    UpdateManager.RestartApp();
+                }
             }
         }
     }
