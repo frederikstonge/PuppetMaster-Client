@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using PuppetMaster.Client.UI.Facades;
 using PuppetMaster.Client.UI.Models.Requests;
+using PuppetMaster.Client.UI.Properties;
 
 namespace PuppetMaster.Client.UI.ViewModels
 {
@@ -71,6 +73,13 @@ namespace PuppetMaster.Client.UI.ViewModels
         }
 
         public bool CanUpdateUser => !HasErrors && !IsLoading;
+
+        public void Logout()
+        {
+            Settings.Default.BackendTokenResponse = null;
+            Settings.Default.Save();
+            Application.Current.Shutdown();
+        }
 
         public async Task UpdateUser()
         {

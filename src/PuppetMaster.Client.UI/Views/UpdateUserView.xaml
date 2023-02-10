@@ -29,6 +29,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Button Name="UpdateUser" Margin="4" Grid.Column="0">
                 <StackPanel>
@@ -36,6 +37,7 @@
                     <mah:ProgressRing mah:VisibilityHelper.IsVisible="{Binding IsLoading}" Height="16" Width="16" Foreground="{DynamicResource AccentColorBrush}" IsActive="True" />
                 </StackPanel>
             </Button>
+            <Button Name="Logout" Margin="4" Grid.Column="1">Logout and Exit</Button>
         </Grid>
     </StackPanel>
 </UserControl>
