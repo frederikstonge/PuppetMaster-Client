@@ -28,7 +28,7 @@ It won't be flagged as a cheat by Vanguard because it doesn't inject itself or r
 ## Prerequisite
 
 - Visual Studio
-- .NET 6 SDK
+- .NET 7 SDK
 
 
 ## Sources
