@@ -2,6 +2,8 @@
 
 # PuppetMaster Client
 
+![image](https://user-images.githubusercontent.com/5427239/231289190-c24522e8-1be2-4aae-9581-07e57a4dc96a.png)
+
 ## PuppetMaster is a Valorant PUG system
 
 - 2 teams, 2 captains draft
