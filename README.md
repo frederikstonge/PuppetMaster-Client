@@ -2,7 +2,7 @@
 
 # PuppetMaster Client
 
-Server repo is here : [PuppetMaster Client](https://github.com/frederikstonge/PuppetMaster-WebApi)
+Server repo is here : [PuppetMaster Server](https://github.com/frederikstonge/PuppetMaster-WebApi)
 
 ![image](https://user-images.githubusercontent.com/5427239/231289190-c24522e8-1be2-4aae-9581-07e57a4dc96a.png)
 
