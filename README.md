@@ -6,19 +6,18 @@ Server repo is here : [PuppetMaster Server](https://github.com/frederikstonge/Pu
 
 ![image](https://user-images.githubusercontent.com/5427239/231289190-c24522e8-1be2-4aae-9581-07e57a4dc96a.png)
 
-## PuppetMaster is a Valorant PUG system
+## PuppetMaster is a Valorant PUG system, with a similar design to the old ESEA Client
 
-- 2 teams, 2 captains draft
-- Vote map
+- 2 teams
+- 2 captains
+- Team draft
+- Map viting
 - Public/Private Rooms with chat and ready system
 - Automated lobby management with API (Create, join, set map, start)
 
 ## Disclaimer
 
 This project is not affiliated nor approved by Riot Games.
-
-It won't be flagged as a cheat by Vanguard because it doesn't inject itself or read the game's memory.
-
 
 ## Technologies
 
